@@ -74,3 +74,8 @@ a {
 #cancel>a {
     font-size: 20px;
 }
+
+#italic {
+    font-style: italic;
+    color: #d3d3d3;
+}

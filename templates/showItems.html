@@ -14,8 +14,8 @@
         </a>
     </div>
     <div class="col-md-9">
-        <h2><a href="{{url_for('newMenuItem', id=id)}}">Create New Item</a></h2>
-        <h2>{{categories.name}} Items</h2>
+        <h2><a href="{{url_for('newMenuItem', id=id)}}">Create New Item</a></h2> {% for i in items %}
+        <h2>{{categories.name}} Items({{ loop.length }} items)</h2>
         <h3>Items</h3> {% for i in items %}
         <div class="row">
             <div class="col-md-1"></div>
