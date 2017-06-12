@@ -1,0 +1,10 @@
+{% extends "main.html" %} {% block content %} {% include "header.html" %}
+<!-- <p><a href="/catalog/new">Add New Catalog</a></p> -->
+<div class="row">
+    <div class="col-md-12">
+        <h2>{{items.name}}</h2>
+        <p>Category: {{categories.name}}</p>
+        <p>Item: {{items.name}}</p>
+        <p>Description: {{items.description}}</p>
+    </div>
+</div> {% endblock %}

@@ -1,0 +1,13 @@
+{% extends "main.html" %} {% block content %} {% include "header.html" %}
+<div class="row">
+    <div class="col-md-12">
+        <h2> Are you sure you want to delete {{deleteItem.name}}? </h2>
+
+        <form action="{{ url_for('deleteMenuItem', id=id, item_id=item_id)}}" method='post'>
+
+            <input type='submit' , value='Delete'>
+            <span id="cancel"><a href="{{url_for('showItems', id=id)}}"> Cancel </a></span>
+        </form>
+    </div>
+</div>
+{% endblock %}

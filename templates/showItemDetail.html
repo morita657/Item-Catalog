@@ -1,0 +1,13 @@
+{% extends "main.html" %} {% block content %} {% include "header.html" %}
+<!-- <p><a href="/catalog/new">Add New Catalog</a></p> -->
+<div class="row">
+    <div class="col-md-12">
+        <h2>{{items.name}}</h2>
+        <p>Category: {{categories.name}}</p>
+        <p>Item: {{items.name}}</p>
+        <p>Description: {{items.description}}</p>
+        <a href="{{url_for('editMenuItem', id=id, item_id=items.id)}}">edit</a>
+        <a href="{{url_for('deleteMenuItem', id=id, item_id=items.id)}}">delete</a>
+    </div>
+</div>
+{% endblock %}

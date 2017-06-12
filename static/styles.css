@@ -1,0 +1,76 @@
+body {
+    font-family: sans-serif;
+    background-image: url("http://webdesignbucket.com/wp-content/uploads/2012/02/free-wood-textures.jpg");
+    height: 150%:
+}
+
+h1, h2, h3, h4 {
+    color: #FFFFFF;
+    color: #000;
+}
+
+h1, h2 {
+    font-family: 'Georgia', serif;
+    margin: 0;
+}
+
+h1 {
+    color: #000;
+}
+
+p, dd, dt {
+    color: #000;
+    font-size: 1.5em;
+}
+
+a {
+    text-decoration: none;
+    font-size: 1.5em;
+}
+
+.pane {
+    position: absolute;
+    left: 25%;
+    border: 2px solid;
+    border-radius: 25px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.header {
+    left: 50%;
+    text-align: center;
+}
+
+.name {
+    width: 50%;
+    display: inline-block;
+    float: left;
+}
+
+.description {}
+
+.price {
+    text-align: right;
+    width: 50%;
+    float: right;
+}
+
+.editdeletepane {}
+
+.flash {
+    /*background: #cee5F5;*/
+}
+
+.container {
+    background-color: #fff;
+    height: 100%;
+}
+
+.row {
+    padding-bottom: 100px;
+}
+
+#cancel>a {
+    font-size: 20px;
+}

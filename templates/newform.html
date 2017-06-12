@@ -1,0 +1,17 @@
+{% extends "main.html" %} {% block content %} {% include "header.html" %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Add New Category</h2>
+
+        <form action="{{url_for('newCategory', item_id = item_id)}}" method="POST">
+
+            <p>Name:</p>
+
+            <input type='text' size='30' name='name'>
+
+            <input type='submit' value='Create'>
+            <span id="cancel"><a href="{{url_for('shoCategory')}}">cancel</a></span>
+        </form>
+    </div>
+</div>
+{% endblock %}
