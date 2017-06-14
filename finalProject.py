@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, make_response
 app = Flask(__name__)
 
 from sqlalchemy import create_engine
@@ -15,7 +15,6 @@ from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
 import json
-from flask import make_response
 import requests
 from functools import wraps
 
@@ -26,44 +25,9 @@ engine = create_engine('sqlite:///catalogitem.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
-session = DBSession()#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-from flask import Flask, render_template, request, redirect, url_for, \
-    flash, jsonify
-app = Flask(__name__)
-
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from finalProjectDatabase_setup import Base, Catalog, CatalogList, User
-
-# login_session works like a dictionary. I can store values in it for
-# the longevity of a user's session with my server.
-
-from flask import session as login_session
-import random
-import string
-
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.client import FlowExchangeError
-import httplib2
-import json
-from flask import make_response
-import requests
-from functools import wraps
-
-CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web'
-]['client_id']
-
-engine = create_engine('sqlite:///catalogitem.db')
-Base.metadata.bind = engine
-
-DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-
 def loggedIn(f):
-
     @wraps(f)
     def wrapper(*args, **kwargs):
         user_id = login_session.get('user_id')
@@ -85,6 +49,11 @@ def CatalogItemjson(id):
     menu = session.query(CatalogList).filter_by(id=id).one()
     return jsonify(Catalogs=[menu.serialize])
 
+# @app.route('/catalog/<int:id>/<int:item_id>/JSON')
+# def CatalogItemjson(id, item_id):
+#     menu = session.query(Catalog).filter_by(id=id).one()
+#     items = session.query(CatalogList).filter_by(id=item_id).one()
+#     return jsonify(Catalogs=[items.serialize])
 
 @app.route('/<category>')
 def hwy(category):
