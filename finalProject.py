@@ -246,45 +246,44 @@ def newCategory():
         session.commit()
         print 'session: ', session
         return redirect(url_for('shoCategory'))
-
-    # newCategory =
-
     return render_template('newform.html')
-
-
-    # return "This page will be for making a new restaurant"
 
 @app.route('/catalog/<int:id>/edit', methods=['GET', 'POST'])
 @loggedIn
 def editCategory(id):
-
+    # categories = session.query(Catalog).filter_by(id=id).one()
     editCategory = session.query(Catalog).filter_by(id=id).one()
-    print 'editCategory.id: ', editCategory.name
-    if request.method == 'POST':
-        editCategoryName = Catalog(name=request.form['editname'], id=id)
-        editCategory.name = editCategoryName.name
-        session.add(editCategory)
-        session.commit()
-        print 'Edit name: ', editCategory.name
-        return redirect(url_for('shoCategory'))
-    return render_template('editCategoryName.html',
-                           editCategory=editCategory, id=id)
+    creator = getUserInfo(editCategory.user_id)
+    items = session.query(CatalogList).filter_by(menu_id=id).all()
+    if creator.id != login_session['user_id']:
+        return render_template('publicShowItems.html',
+                               categories=editCategory, items=items,
+                               id=id, creator=creator)
+    else:
+        if request.method == 'POST':
+            editCategoryName = Catalog(name=request.form['editname'], id=id)
+            editCategory.name = editCategoryName.name
+            session.add(editCategory)
+            session.commit()
+            print 'Edit name: ', editCategory.name
+            return redirect(url_for('shoCategory'))
+        return render_template('editCategoryName.html',
+                               editCategory=editCategory, id=id)
 
 @app.route('/catalog/<int:id>/delete', methods=['GET', 'POST'])
 @loggedIn
 def deleteCategory(id):
     categoryItem = session.query(Catalog).filter_by(id=id).one()
-    if 'username' not in login_session:
-        return redirect('/login')
+    # if 'username' not in login_session:
+    #     return redirect('/login')
     if categoryItem.user_id != login_session['user_id']:
-        return "<script>function myFunction() {alert('You are not authorized to delete this restaurant. Please create your own restaurant in order to delete.');}</script><body onload='myFunction()'>"
+        return "<script>function myFunction() {alert('You are not authorized to delete this category. Please create your own category in order to delete.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         session.delete(categoryItem)
         session.commit()
         return redirect(url_for('shoCategory', id=id))
     return render_template('delteCategoryName.html',
                            categoryItem=categoryItem, id=id)
-
 
 @app.route('/catalog/<int:id>')
 @app.route('/catalog/<int:id>/items')
@@ -303,7 +302,6 @@ def showItems(id):
         return render_template('showItems.html', categories=categories,
                                items=items, id=id, creator=creator)
 
-
 @app.route('/catalog/<int:id>/items/new', methods=['GET', 'POST'])
 @loggedIn
 def newMenuItem(id):
@@ -317,24 +315,29 @@ def newMenuItem(id):
         return redirect(url_for('showItems', id=id))
     return render_template('newItem.html', id=id)
 
-
 @app.route('/catalog/<int:id>/<int:item_id>/edit', methods=['GET',
            'POST'])
 @loggedIn
 def editMenuItem(id, item_id):
     categories = session.query(Catalog).filter_by(id=id).one()
     editItem = session.query(CatalogList).filter_by(id=item_id).one()
-    if request.method == 'POST':
-        editItemName = CatalogList(name=request.form['editname'],
-                                   description=request.form['editdescription'
-                                   ],
-                                   catalog=request.form['editcategory'])
-        editItem.name = editItemName.name
-        session.add(editItem)
-        session.commit()
-        return redirect(url_for('showItems', id=id))
-    return render_template('editItemName.html', id=id, item_id=item_id,
-                           editItem=editItem)
+    creator = getUserInfo(editCategory.user_id)
+    if creator.id != login_session['user_id']:
+        return render_template('publicShowItemDetail.html', id=id,
+                               item_id=item_id, items=items,
+                               categories=categories)
+    else:
+        if request.method == 'POST':
+            editItemName = CatalogList(name=request.form['editname'],
+                                       description=request.form['editdescription'
+                                       ],
+                                       catalog=request.form['editcategory'])
+            editItem.name = editItemName.name
+            session.add(editItem)
+            session.commit()
+            return redirect(url_for('showItems', id=id))
+        return render_template('editItemName.html', id=id, item_id=item_id,
+                               editItem=editItem)
 
 @app.route('/catalog/<int:id>/<int:item_id>/delete', methods=['GET',
            'POST'])
@@ -342,6 +345,8 @@ def editMenuItem(id, item_id):
 def deleteMenuItem(id, item_id):
     items = session.query(Catalog).all()
     deleteItem = session.query(CatalogList).filter_by(id=item_id).one()
+    if deleteItem.user_id != login_session['user_id']:
+        return "<script>function myFunction() {alert('You are not authorized to delete this item. Please create your own item in order to delete.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         session.delete(deleteItem)
         session.commit()
