@@ -46,14 +46,13 @@ def Catalogjson():
 
 @app.route('/catalog/<int:id>/JSON')
 def CatalogItemjson(id):
-    menu = session.query(CatalogList).filter_by(id=id).one()
-    return jsonify(Catalogs=[menu.serialize])
+    items = session.query(CatalogList).filter_by(menu_id=id).all()
+    return jsonify(Catalogs=[j.serialize for j in items])
 
-# @app.route('/catalog/<int:id>/<int:item_id>/JSON')
-# def CatalogItemjson(id, item_id):
-#     menu = session.query(Catalog).filter_by(id=id).one()
-#     items = session.query(CatalogList).filter_by(id=item_id).one()
-#     return jsonify(Catalogs=[items.serialize])
+@app.route('/catalog/<int:id>/<int:item_id>/JSON')
+def Itemjson(id, item_id):
+    items = session.query(CatalogList).filter_by(id=item_id).one()
+    return jsonify(Item=[items.serialize])
 
 @app.route('/<category>')
 def hwy(category):
