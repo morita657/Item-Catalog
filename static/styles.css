@@ -80,3 +80,10 @@ a {
     font-style: italic;
     color: #d3d3d3;
 }
+
+span.label {
+    text-align: left;
+    width: 10%;
+    color: #000;
+    display: inline-block;
+}
