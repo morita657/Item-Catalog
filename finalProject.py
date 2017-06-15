@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, make_response
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, make_response, abort
 app = Flask(__name__)
 
 from sqlalchemy import create_engine
@@ -37,6 +37,12 @@ def loggedIn(f):
         return f(*args, **kwargs)
     return wrapper
 
+def user_authed(uid, sess_id):
+    """Tests whether a user is authorized to make CRUD action"""
+    if uid != sess_id:
+        abort(403)
+    else:
+        return True
 
 @app.route('/catalog/JSON')
 def Catalogjson():
@@ -54,14 +60,6 @@ def Itemjson(id, item_id):
     items = session.query(CatalogList).filter_by(id=item_id).one()
     return jsonify(Item=[items.serialize])
 
-@app.route('/<category>')
-def hwy(category):
-    categoryItem = \
-        session.query(Catalog).filter_by(name=category).first()
-    print '', categoryItem.id, categoryItem.name
-    return 'hey %s' % categoryItem.name
-
-
 @app.route('/')
 @app.route('/catalog')
 def shoCategory():
@@ -70,11 +68,9 @@ def shoCategory():
 
     items = session.query(CatalogList).all()
     if 'username' not in login_session:
-        print 'hi', login_session
         return render_template('publicItemList.html',
                                categories=categories, items=items)
     else:
-        print 'hi', login_session
         return render_template('itemlist.html', categories=categories,
                                items=items)
 
@@ -251,11 +247,10 @@ def newCategory():
 @app.route('/catalog/<int:id>/edit', methods=['GET', 'POST'])
 @loggedIn
 def editCategory(id):
-    # categories = session.query(Catalog).filter_by(id=id).one()
     editCategory = session.query(Catalog).filter_by(id=id).one()
     creator = getUserInfo(editCategory.user_id)
     items = session.query(CatalogList).filter_by(menu_id=id).all()
-    if creator.id != login_session['user_id']:
+    if not user_authed(creator.id, login_session['user_id']):
         return render_template('publicShowItems.html',
                                categories=editCategory, items=items,
                                id=id, creator=creator)
@@ -265,18 +260,18 @@ def editCategory(id):
             editCategory.name = editCategoryName.name
             session.add(editCategory)
             session.commit()
-            print 'Edit name: ', editCategory.name
             return redirect(url_for('shoCategory'))
         return render_template('editCategoryName.html',
                                editCategory=editCategory, id=id)
+
+
+
 
 @app.route('/catalog/<int:id>/delete', methods=['GET', 'POST'])
 @loggedIn
 def deleteCategory(id):
     categoryItem = session.query(Catalog).filter_by(id=id).one()
-    # if 'username' not in login_session:
-    #     return redirect('/login')
-    if categoryItem.user_id != login_session['user_id']:
+    if not user_authed(categoryItem.user_id, login_session['user_id']):
         return "<script>function myFunction() {alert('You are not authorized to delete this category. Please create your own category in order to delete.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         session.delete(categoryItem)
@@ -312,7 +307,7 @@ def newMenuItem(id):
         session.add(newItem)
         session.commit()
         print 'session: ', newItem.id, newItem.name, newItem.menu_id
-        return redirect(url_for('showItems', id=id))
+        return redirect(url_for('showItems.html', id=id))
     return render_template('newItem.html', id=id)
 
 @app.route('/catalog/<int:id>/<int:item_id>/edit', methods=['GET',
@@ -322,7 +317,7 @@ def editMenuItem(id, item_id):
     categories = session.query(Catalog).filter_by(id=id).one()
     editItem = session.query(CatalogList).filter_by(id=item_id).one()
     creator = getUserInfo(editCategory.user_id)
-    if creator.id != login_session['user_id']:
+    if not user_authed(creator.id, login_session['user_id']):
         return render_template('publicShowItemDetail.html', id=id,
                                item_id=item_id, items=items,
                                categories=categories)
@@ -345,7 +340,7 @@ def editMenuItem(id, item_id):
 def deleteMenuItem(id, item_id):
     items = session.query(Catalog).all()
     deleteItem = session.query(CatalogList).filter_by(id=item_id).one()
-    if deleteItem.user_id != login_session['user_id']:
+    if not user_authed(deleteItem.user_id, login_session['user_id']):
         return "<script>function myFunction() {alert('You are not authorized to delete this item. Please create your own item in order to delete.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         session.delete(deleteItem)
@@ -360,8 +355,7 @@ def showItemDetail(id, item_id):
     print 'categories: ', categories
     creator = getUserInfo(categories.user_id)
     items = session.query(CatalogList).filter_by(id=item_id).one()
-    if 'username' not in login_session or creator.id \
-        != login_session['user_id']:
+    if 'username' not in login_session or user_authed(creator.id, login_session['user_id']):
         return render_template('publicShowItemDetail.html', id=id,
                                item_id=item_id, items=items,
                                categories=categories)
