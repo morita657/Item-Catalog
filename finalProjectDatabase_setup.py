@@ -2,7 +2,7 @@ import os
 import sys
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy import create_engine
 
 Base = declarative_base()
@@ -35,6 +35,7 @@ class CatalogList(Base):
     id = Column(Integer, primary_key = True)
     menu_id = Column(Integer, ForeignKey('catalog.id'))
     catalog = relationship(Catalog)
+    category = relationship(Catalog, backref=backref("catalog_list", cascade="all, delete-orphan"))
     description = Column(String(250))
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)

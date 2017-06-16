@@ -82,6 +82,8 @@ def shoCategory():
         return render_template('publicItemList.html',
                                categories=categories, items=items)
     else:
+        for c in categories:
+            print c.id, c.name
         return render_template('itemlist.html', categories=categories,
                                items=items)
 
@@ -324,7 +326,7 @@ def newMenuItem(id):
         session.add(newItem)
         session.commit()
         print 'session: ', newItem.id, newItem.name, newItem.menu_id
-        return redirect(url_for('showItems.html', id=id))
+        return redirect(url_for('showItems', id=id))
     return render_template('newItem.html', id=id)
 
 
@@ -334,7 +336,8 @@ def newMenuItem(id):
 def editMenuItem(id, item_id):
     categories = session.query(Catalog).filter_by(id=id).one()
     editItem = session.query(CatalogList).filter_by(id=item_id).one()
-    creator = getUserInfo(editCategory.user_id)
+    creator = getUserInfo(categories.user_id)
+
     if not user_authed(creator.id, login_session['user_id']):
         return render_template('publicShowItemDetail.html', id=id,
                                item_id=item_id, items=items,
