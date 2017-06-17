@@ -1,29 +1,35 @@
 {% extends "main.html" %} {% block content %}{% include "header.html" %}
 
 <div class="row">
+    <div class='flash'>
+        {% with messages = get_flashed_messages() %} {% if messages %}
+
+        <ul>
+            {% for message in messages %}
+            <li> <strong> {{ message }} </strong> </li>
+            {% endfor %}
+        </ul>
+        {% endif %} {% endwith %}
+
+    </div>
     <div class="col-md-3">
         <h2>Categories</h2>
-        <div class='flash'>
-            {% with messages = get_flashed_messages() %} {% if messages %}
+        <div class="row">
+            <div class="col-md-1"></div>
 
-            <ul>
-                {% for message in messages %}
-                <li> <strong> {{ message }} </strong> </li>
-                {% endfor %}
-            </ul>
-            {% endif %} {% endwith %}
-
-        </div>
-        {% for c in categories %}
-        <a href="{{url_for('showItems', id = c.id)}}">
-            <div class="row">
-                <div class="col-md-1"></div>
-                <div class="col-md-10 restaurant-list">
-                    <h3><a href="{{url_for('showItems', id=c.id)}}">{{ c.name }}</a></h3>
-                </div>
-                <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <ul>
+                    {% for c in categories %}
+                    <li>
+                        <a href="{{url_for('showItems', id = c.id)}}">
+                            <a href="{{url_for('showItems', id=c.id)}}">{{ c.id }}{{ c.name }}</a><br>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
             </div>
-        </a>
+            <div class="col-md-1"></div>
+        </div>
     </div>
     <div class="col-md-9">
         <h2>Latest Items</h2> {% for i in items %}
@@ -31,12 +37,13 @@
             <div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-md-10 restaurant-list">
-                    <h3><a href="{{url_for('showItemDetail', id=c.id, item_id=i.id)}}">{{ i.name }}</a><span id="italic">({{c.name}})</span></h3>
+                    <h3><a href="{{url_for('showItems', id=i.id)}}">{{ i.id }}{{ i.name }}</a>
+                      <span id="italic">{% for c in categories %}({{categories.name}}){% endfor %}</span>
                 </div>
                 <div class="col-md-1"></div>
             </div>
         </a>
-        {% endfor %} {% endfor %}
+        {% endfor %}
     </div>
 
 </div>
