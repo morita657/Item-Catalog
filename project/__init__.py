@@ -1,27 +1,32 @@
-# #!/usr/bin/python
-# # -*- coding: utf-8 -*-
-# from flask import Flask, render_template, request, redirect, url_for, \
-#     flash, jsonify, make_response, abort
-# app = Flask(__name__)
-#
-# from sqlalchemy import create_engine
-# from sqlalchemy.orm import sessionmaker
-# from finalProjectDatabase_setup import Base, Catalog, CatalogList, User
-#
-# # login_session works like a dictionary. I can store values in it for
-# # the longevity of a user's session with my server.
-#
-# from flask import session as login_session
-# import random
-# import string
-#
-# from oauth2client.client import flow_from_clientsecrets
-# from oauth2client.client import FlowExchangeError
-# import httplib2
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+from flask import Flask, render_template, request, redirect, url_for, \
+    flash, jsonify, make_response, abort
+app = Flask(__name__)
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from finalProjectDatabase_setup import Base, Catalog, CatalogList, User
+
+# login_session works like a dictionary. I can store values in it for
+# the longevity of a user's session with my server.
+
+from flask import session as login_session
+import random
+import string
+
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import FlowExchangeError
+import httplib2
 # import json
-# import requests
+import requests
 # from functools import wraps
-#
+from category_views import shoCategory, newCategory, editCategory, deleteCategory
+from item_views import showItems, newMenuItem, editMenuItem, deleteMenuItem
+from make_json import Catalogjson, CatalogItemjson, Itemjson
+from auth import showLogin, gconnect, gdisconnect
+from utils import *
+
 # CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web'][
 #     'client_id']
 #
@@ -42,8 +47,8 @@
 #             return redirect('/login')
 #         return f(*args, **kwargs)
 #     return wrapper
-#
-#
+
+
 # def user_authed(uid, sess_id):
 #     """Tests whether a user is authorized to make CRUD action"""
 #
@@ -51,8 +56,8 @@
 #         abort(403)
 #     else:
 #         return True
-#
-#
+
+
 # @app.route('/catalog/JSON')
 # def Catalogjson():
 #     catalog = session.query(Catalog).all()
@@ -69,8 +74,8 @@
 # def Itemjson(id, item_id):
 #     items = session.query(CatalogList).filter_by(id=item_id).one()
 #     return jsonify(Item=[items.serialize])
-#
-#
+
+
 # @app.route('/')
 # @app.route('/catalog')
 # def shoCategory():
@@ -86,8 +91,8 @@
 #             print c.id, c.name
 #         return render_template('itemlist.html', categories=categories,
 #                                items=items)
-#
-#
+
+
 # @app.route('/login/')
 # def showLogin():
 #     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -245,8 +250,8 @@
 #             user.'), 400)
 #         response.headers['Content-Type'] = 'application/json'
 #         return response
-#
-#
+
+
 # @app.route('/catalog/new', methods=['GET', 'POST'])
 # @loggedIn
 # def newCategory():
@@ -258,8 +263,8 @@
 #         print 'session: ', session
 #         return redirect(url_for('shoCategory'))
 #     return render_template('newform.html')
-#
-#
+
+
 # @app.route('/catalog/<int:id>/edit', methods=['GET', 'POST'])
 # @loggedIn
 # def editCategory(id):
@@ -280,8 +285,8 @@
 #             return redirect(url_for('shoCategory'))
 #         return render_template('editCategoryName.html',
 #                                editCategory=editCategory, id=id)
-#
-#
+
+
 # @app.route('/catalog/<int:id>/delete', methods=['GET', 'POST'])
 # @loggedIn
 # def deleteCategory(id):
@@ -296,8 +301,8 @@
 #         return redirect(url_for('shoCategory', id=id))
 #     return render_template('delteCategoryName.html',
 #                            categoryItem=categoryItem, id=id)
-#
-#
+
+
 # @app.route('/catalog/<int:id>')
 # @app.route('/catalog/<int:id>/items')
 # def showItems(id):
@@ -371,8 +376,8 @@
 #         return redirect(url_for('showItems', id=id))
 #     return render_template('deleteItemName.html', id=id,
 #                            item_id=item_id, deleteItem=deleteItem)
-#
-#
+
+
 # @app.route('/catalog/<int:id>/<int:item_id>')
 # def showItemDetail(id, item_id):
 #     categories = session.query(Catalog).filter_by(id=id).one()
@@ -388,8 +393,8 @@
 #         return render_template('showItemDetail.html', id=id,
 #                                item_id=item_id, items=items,
 #                                categories=categories)
-#
-#
+
+
 # def getUserID(email):
 #     try:
 #         user = session.query(User).filter_by(email=email).one()
@@ -411,9 +416,3 @@
 #     session.commit()
 #     user = session.query(User).filter_by(email=login_session['email']).one()
 #     return user.id
-from project import app
-
-if __name__ == '__main__':
-    app.secret_key = 'super'
-    app.debug = True
-    app.run(host='0.0.0.0', port=5000)
