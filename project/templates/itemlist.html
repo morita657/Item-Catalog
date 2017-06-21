@@ -6,8 +6,8 @@
 
         <ul>
             {% for message in messages %}
-            <li> <strong> {{ message }} </strong>
-            </li> {% endfor %}
+            <li> <strong> {{ message }} </strong> </li>
+            {% endfor %}
         </ul>
         {% endif %} {% endwith %}
 
@@ -40,8 +40,9 @@
             <div class="row">
                 <div class="col-md-1"></div>
                 <div class="col-md-10 restaurant-list">
-                    <h3><a href="{{url_for('showItems', id=i.id)}}">{{ i.id }}{{ i.name }}</a>
-                      <span id="italic">{% for c in categories %}({{categories.name}}){% endfor %}</span>
+                    <h3>{% for c in categories %}
+                      <a href="{{url_for('showItemDetail', id=c.id, item_id=i.id)}}">{{ i.id }}{{ i.name }}</a>
+                      <span id="italic">({{ c.name }}){% endfor %}</span>
                     </h3>
                 </div>
                 <div class="col-md-1"></div>

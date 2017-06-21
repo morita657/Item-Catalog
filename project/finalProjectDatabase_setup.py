@@ -48,14 +48,6 @@ class CatalogList(Base):
             'description':self.description
         }
 
-# class CatalogItem(Base):
-#     __tablename__ = 'catalog_item'
-#     id = Column(Integer, primary_key = True)
-#     name = Column(String(80), nullable = False)
-#     description = Column(String(250))
-#     item_id = Column(Integer, ForeignKey('catalog_list.id'))
-#     item = relationship(CatalogList)
-
 engine = create_engine(
 'sqlite:///catalogitem.db')
 Base.metadata.create_all(engine)

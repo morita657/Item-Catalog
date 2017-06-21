@@ -2,12 +2,8 @@ from project import app
 from utils import *
 from flask import Flask, render_template, request, redirect, url_for, \
     flash, jsonify, make_response, abort
-# from functools import wraps
-# from sqlalchemy import create_engine
-# from sqlalchemy.orm import sessionmaker
 from finalProjectDatabase_setup import Base, Catalog, CatalogList, User
 from flask import session as login_session
-# import json
 
 @app.route('/catalog/<int:id>')
 @app.route('/catalog/<int:id>/items')
@@ -38,6 +34,7 @@ def newMenuItem(id):
         session.commit()
         print 'session: ', newItem.id, newItem.name, newItem.menu_id
         return redirect(url_for('showItems', id=id))
+    print 'login_session: ', login_session
     return render_template('newItem.html', id=id)
 
 
@@ -72,10 +69,12 @@ def editMenuItem(id, item_id):
 def deleteMenuItem(id, item_id):
     items = session.query(Catalog).all()
     deleteItem = session.query(CatalogList).filter_by(id=item_id).one()
-    if not user_authed(deleteItem.user_id, login_session['user_id']):
-        return "<script>function myFunction() {alert('You are not authorized \
-        to delete this item. Please create your own item in order to \
-        delete.');}</script><body onload='myFunction()'>"
+    print "hi ", login_session['user_id'], deleteItem.id
+    print "check: ", user_authed(deleteItem.id, login_session['user_id'])
+    # if user_authed(deleteItem.user_id, login_session['user_id']):
+    #     return "<script>function myFunction() {alert('You are not authorized \
+    #     to delete this item. Please create your own item in order to \
+    #     delete.');}</script><body onload='myFunction()'>"
     if request.method == 'POST':
         session.delete(deleteItem)
         session.commit()
@@ -86,10 +85,9 @@ def deleteMenuItem(id, item_id):
 @app.route('/catalog/<int:id>/<int:item_id>')
 def showItemDetail(id, item_id):
     categories = session.query(Catalog).filter_by(id=id).one()
-    print 'categories: ', categories
     creator = getUserInfo(categories.user_id)
     items = session.query(CatalogList).filter_by(id=item_id).one()
-    if 'username' not in login_session or user_authed(creator.id,
+    if 'username' not in login_session or not user_authed(creator.id,
             login_session['user_id']):
         return render_template('publicShowItemDetail.html', id=id,
                                item_id=item_id, items=items,

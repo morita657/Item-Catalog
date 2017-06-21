@@ -2,12 +2,15 @@ from project import app
 from utils import *
 from flask import Flask, render_template, request, redirect, url_for, \
     flash, jsonify, make_response, abort
-import httplib2
-# from functools import wraps
-# from sqlalchemy import create_engine
-# from sqlalchemy.orm import sessionmaker
+
 from finalProjectDatabase_setup import Base, Catalog, CatalogList, User
 from flask import session as login_session
+import random
+import string
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import FlowExchangeError
+import requests
+import httplib2
 from utils import *
 
 @app.route('/login/')
@@ -15,6 +18,7 @@ def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
     for x in xrange(32))
     login_session['state'] = state
+    print 'login_session: ', login_session
     return render_template('login.html', STATE=state)
 
 
