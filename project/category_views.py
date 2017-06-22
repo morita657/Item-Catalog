@@ -8,17 +8,12 @@ from flask import session as login_session
 @app.route('/')
 @app.route('/catalog')
 def shoCategory():
-    # category = session.query(Catalog).filter_by(id=id).one()
     categories = session.query(Catalog).all()
-
-    items = session.query(CatalogList).all()
-    print 'login_session: ', login_session
+    items = session.query(CatalogList).order_by("id desc").limit(10).all()
     if 'username' not in login_session:
         return render_template('publicItemList.html',
                                categories=categories, items=items)
     else:
-        for c in categories:
-            print c.id, c.name
         return render_template('itemlist.html', categories=categories,
                                items=items)
 

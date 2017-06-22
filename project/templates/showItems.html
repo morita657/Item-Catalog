@@ -6,10 +6,11 @@
         <div class="row">
             <div class="col-md-1"></div>
             <div class="col-md-10 restaurant-list">
-                <ul>
+                <ul>{% for c in categories %}
                     <li>
-                        <a href="{{url_for('showItems', id=categories.id)}}">{{ categories.name }}</a>
+                        <a href="{{url_for('showItems', id=c.id)}}">{{ c.name }}</a>
                     </li>
+                    {% endfor %}
                 </ul>
             </div>
             <div class="col-md-1"></div>
@@ -17,13 +18,16 @@
     </div>
     <div class="col-md-9">
         <a href="{{url_for('newMenuItem', id=id)}}">Create New Item</a>
-        <h2>{{categories.name}} Items ({{items|length}} items)</h2>
-        <h3>Items</h3> {% for i in items %}
-        <h4>
-          <a href="{{url_for('showItemDetail', id=id, item_id=i.id)}}">{{ i.name }}</a>
-          <a href="{{url_for('editMenuItem', id=id, item_id=i.id)}}">edit</a>
-          <a href="{{url_for('deleteMenuItem', id=i.id, item_id=i.id)}}">delete</a>
-        </h4> {% endfor %}
+        <h2>{{category.name}} Items ({{items|length}} items)</h2>
+        <h3>Items</h3>
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10"> {% for i in items %}
+                <h4>
+                  <a href="{{url_for('showItemDetail', id=id, item_id=i.id)}}">{{ i.name }}</a>
+                </h4> {% endfor %}
+            </div>
+            <div class="col-md-1"></div>
+        </div>
     </div>
-
 </div> {% endblock %}
