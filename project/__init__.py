@@ -19,7 +19,8 @@ from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
 import requests
-from category_views import shoCategory, newCategory, editCategory, deleteCategory
+from category_views import shoCategory, newCategory, editCategory, \
+    deleteCategory
 from item_views import showItems, newMenuItem, editMenuItem, deleteMenuItem
 from make_json import Catalogjson, CatalogItemjson, Itemjson
 from auth import showLogin, gconnect, gdisconnect

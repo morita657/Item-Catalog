@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from project import app
 from utils import *
 from flask import Flask, render_template, request, redirect, url_for, \
@@ -5,9 +7,11 @@ from flask import Flask, render_template, request, redirect, url_for, \
 from finalProjectDatabase_setup import Base, Catalog, CatalogList, User
 from flask import session as login_session
 
+
 @app.route('/')
 @app.route('/catalog')
 def shoCategory():
+    # Show latest created items and categories
     categories = session.query(Catalog).all()
     items = session.query(CatalogList).order_by("id desc").limit(10).all()
     if 'username' not in login_session:
@@ -17,9 +21,11 @@ def shoCategory():
         return render_template('itemlist.html', categories=categories,
                                items=items)
 
+
 @app.route('/catalog/new', methods=['GET', 'POST'])
 @loggedIn
 def newCategory():
+    # Create new category
     if request.method == 'POST':
         newCategory = Catalog(name=request.form['name'],
                               user_id=login_session['user_id'])
@@ -29,9 +35,11 @@ def newCategory():
         return redirect(url_for('shoCategory'))
     return render_template('newform.html')
 
+
 @app.route('/catalog/<int:id>/edit', methods=['GET', 'POST'])
 @loggedIn
 def editCategory(id):
+    # Edit category information
     editCategory = session.query(Catalog).filter_by(id=id).one()
     creator = getUserInfo(editCategory.user_id)
     items = session.query(CatalogList).filter_by(menu_id=id).all()
@@ -54,6 +62,7 @@ def editCategory(id):
 @app.route('/catalog/<int:id>/delete', methods=['GET', 'POST'])
 @loggedIn
 def deleteCategory(id):
+    # Delete a category and that of items
     categoryItem = session.query(Catalog).filter_by(id=id).one()
     if not user_authed(categoryItem.user_id, login_session['user_id']):
         return "<script>function myFunction() {alert('You are not authorized \

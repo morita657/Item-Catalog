@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from project import app
 from utils import *
 from flask import Flask, render_template, request, redirect, url_for, \
@@ -12,6 +14,7 @@ from oauth2client.client import FlowExchangeError
 import requests
 import httplib2
 from utils import *
+
 
 @app.route('/login/')
 def showLogin():

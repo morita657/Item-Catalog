@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from project import app
 from utils import *
 from flask import Flask, render_template, request, redirect, url_for, \
@@ -5,9 +7,11 @@ from flask import Flask, render_template, request, redirect, url_for, \
 from finalProjectDatabase_setup import Base, Catalog, CatalogList, User
 from flask import session as login_session
 
+
 @app.route('/catalog/<int:id>')
 @app.route('/catalog/<int:id>/items')
 def showItems(id):
+    # Show items in a specific category
     categories = session.query(Catalog).all()
     category = session.query(Catalog).filter_by(id=id).one()
     creator = getUserInfo(category.user_id)
@@ -26,6 +30,7 @@ def showItems(id):
 @app.route('/catalog/<int:id>/items/new', methods=['GET', 'POST'])
 @loggedIn
 def newMenuItem(id):
+    # Add new item
     if request.method == 'POST':
         newItem = CatalogList(name=request.form['name'],
                               description=request.form['description'],
@@ -42,6 +47,7 @@ def newMenuItem(id):
            'POST'])
 @loggedIn
 def editMenuItem(id, item_id):
+    # Edit an item without changing item id
     categories = session.query(Catalog).filter_by(id=id).one()
     editItem = session.query(CatalogList).filter_by(id=item_id).one()
     creator = getUserInfo(categories.user_id)
@@ -67,6 +73,7 @@ def editMenuItem(id, item_id):
            'POST'])
 @loggedIn
 def deleteMenuItem(id, item_id):
+    # Delete an item
     items = session.query(Catalog).all()
     deleteItem = session.query(CatalogList).filter_by(id=item_id).one()
     if request.method == 'POST':
@@ -76,12 +83,15 @@ def deleteMenuItem(id, item_id):
     return render_template('deleteItemName.html', id=id,
                            item_id=item_id, deleteItem=deleteItem)
 
+
 @app.route('/catalog/<int:id>/<int:item_id>')
 def showItemDetail(id, item_id):
+    # Show an item detail information
     categories = session.query(Catalog).filter_by(id=id).one()
     creator = getUserInfo(categories.user_id)
     items = session.query(CatalogList).filter_by(id=item_id).one()
-    if 'username' not in login_session or creator.id != login_session['user_id']:
+    if 'username' not in login_session or creator.id !=\
+        login_session['user_id']:
         return render_template('publicShowItemDetail.html', id=id,
                                item_id=item_id, items=items,
                                categories=categories)

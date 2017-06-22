@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from project import app
 from flask import Flask, render_template, request, redirect, url_for, \
     flash, jsonify, make_response, abort
@@ -11,15 +13,13 @@ from functools import wraps
 
 CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web'][
     'client_id']
-
 engine = create_engine('sqlite:///catalogitem.db')
 Base.metadata.bind = engine
-
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-def loggedIn(f):
 
+def loggedIn(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         user_id = login_session.get('user_id')
@@ -29,13 +29,14 @@ def loggedIn(f):
         return f(*args, **kwargs)
     return wrapper
 
+
 def user_authed(uid, sess_id):
     """Tests whether a user is authorized to make CRUD action"""
-
     if uid != sess_id:
         abort(403)
     else:
         return True
+
 
 def getUserID(email):
     try:

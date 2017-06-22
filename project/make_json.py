@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 from project import app
 from utils import *
 from flask import Flask, render_template, request, redirect, url_for, \
@@ -5,6 +7,7 @@ from flask import Flask, render_template, request, redirect, url_for, \
 from finalProjectDatabase_setup import Base, Catalog, CatalogList, User
 from flask import session as login_session
 import json
+
 
 @app.route('/catalog/JSON')
 def Catalogjson():
