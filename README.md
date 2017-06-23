@@ -16,11 +16,12 @@ This project requires Python 2.X (2.7.x is expected) and PostgreSQL 9.3 or lates
 1. Download or clone repository on you machine.
 2. Bring the project directory under the vagrant directory.
 3. Start the virtual machine `vagrant up` and `vagrant ssh`.
-4. Go to `cd /vagrant/project` directory.
+4. Go to `cd /vagrant/project/project` directory.
 5. Run database with `python finalProjectDatabase_setup.py`
-6. Run `python finalProject.py` to build web app.
-7. Shutdown the VM with `CTRL + D`.
-8. Don't forget `vagrant halt` to power off VirtualBox.
+6. Type `cd ..` and Enter.
+7. Run `python finalProject.py` to build web app.
+8. Shutdown the VM with `CTRL + D`.
+9. Don't forget `vagrant halt` to power off VirtualBox.
 
 ## Code Quality
 [Here](https://google.github.io/styleguide/pyguide.html) is the Google Python Style Guide that I followed.
