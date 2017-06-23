@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from project import app
 from utils import *
+from item_views import showItemDetail
 from flask import Flask, render_template, request, redirect, url_for, \
     flash, jsonify, make_response, abort
 from finalProjectDatabase_setup import Base, Catalog, CatalogList, User
@@ -15,8 +16,8 @@ def shoCategory():
     categories = session.query(Catalog).all()
     items = session.query(CatalogList).order_by("id desc").limit(10).all()
     if 'username' not in login_session:
-        return render_template('publicItemList.html',
-                               categories=categories, items=items)
+        return render_template('publicItemList.html', categories=categories,
+                               items=items)
     else:
         return render_template('itemlist.html', categories=categories,
                                items=items)
@@ -49,8 +50,7 @@ def editCategory(id):
                                id=id, creator=creator)
     else:
         if request.method == 'POST':
-            editCategoryName = Catalog(name=request.form['editname'],
-                    id=id)
+            editCategoryName = Catalog(name=request.form['editname'], id=id)
             editCategory.name = editCategoryName.name
             session.add(editCategory)
             session.commit()

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from project import app
 from utils import *
+from category_views import *
 from flask import Flask, render_template, request, redirect, url_for, \
     flash, jsonify, make_response, abort
 from finalProjectDatabase_setup import Base, Catalog, CatalogList, User
@@ -16,6 +17,8 @@ def showItems(id):
     category = session.query(Catalog).filter_by(id=id).one()
     creator = getUserInfo(category.user_id)
     items = session.query(CatalogList).filter_by(menu_id=id).all()
+    for i in items:
+        print "i: ", i.id, i.name, i.description, i.menu_id
     if 'username' not in login_session or creator.id\
         != login_session['user_id']:
         return render_template('publicShowItems.html', category=category,
@@ -48,24 +51,28 @@ def newMenuItem(id):
 @loggedIn
 def editMenuItem(id, item_id):
     # Edit an item without changing item id
-    categories = session.query(Catalog).filter_by(id=id).one()
+    categories = session.query(Catalog).all()
+    category = session.query(Catalog).filter_by(id=id).one()
     editItem = session.query(CatalogList).filter_by(id=item_id).one()
-    creator = getUserInfo(categories.user_id)
+    creator = getUserInfo(category.user_id)
 
     if not user_authed(creator.id, login_session['user_id']):
         return render_template('publicShowItemDetail.html', id=id,
                                item_id=item_id, items=items,
-                               categories=categories)
+                               category=categories)
     else:
         if request.method == 'POST':
             editItemName = CatalogList(name=request.form['editname'],
                     description=request.form['editdescription'],
                     catalog=request.form['editcategory'])
             editItem.name = editItemName.name
+            editItem.description = editItemName.description
+            editItem.menu_id = editItemName.catalog
             session.add(editItem)
             session.commit()
             return redirect(url_for('showItems', id=id))
         return render_template('editItemName.html', id=id,
+                                categories=categories,
                                item_id=item_id, editItem=editItem)
 
 
@@ -84,7 +91,7 @@ def deleteMenuItem(id, item_id):
                            item_id=item_id, deleteItem=deleteItem)
 
 
-@app.route('/catalog/<int:id>/<int:item_id>')
+@app.route('/catalog/<int:id>/<int:item_id>/')
 def showItemDetail(id, item_id):
     # Show an item detail information
     categories = session.query(Catalog).filter_by(id=id).one()

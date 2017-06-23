@@ -12,7 +12,11 @@
 
             <label for="description">Description: </label>
             <input id='description' type='text' size='30' name='editdescription' placeholder="{{editItem.description}}">
-            <input type="text" name="editcategory" value="" placeholder="{{editItem.catalog.name}}">
+            <select class="" name="editcategory">
+              {% for c in categories %}
+              <option value="{{ c.id }}">{{ c.name }}</option>
+              {% endfor %}
+            </select>
 
             <input type='submit' value='Edit'>
             <span id="cancel"><a href="{{url_for('showItems', id=id)}}">Cancel</a></span>

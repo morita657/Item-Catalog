@@ -37,7 +37,8 @@
             <div class="col-md-1"></div>
             <div class="col-md-10 restaurant-list">
                 <ul>{% for i in items %}
-                    <li><a href="{{url_for('showItemDetail', id=i.menu_id, item_id=i.id)}}">{{ i.name }}</a>
+                    <li>
+                        <a href="{{url_for('showItemDetail', id=i.menu_id, item_id=i.id)}}">{{ i.name }}</a>
                         <span id="italic">({{ i.name }})</span>
                     </li>
                     {% endfor %}
