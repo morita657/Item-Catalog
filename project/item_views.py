@@ -17,8 +17,6 @@ def showItems(id):
     category = session.query(Catalog).filter_by(id=id).one()
     creator = getUserInfo(category.user_id)
     items = session.query(CatalogList).filter_by(menu_id=id).all()
-    for i in items:
-        print "i: ", i.id, i.name, i.description, i.menu_id
     if 'username' not in login_session or creator.id\
         != login_session['user_id']:
         return render_template('publicShowItems.html', category=category,
@@ -40,9 +38,7 @@ def newMenuItem(id):
                               menu_id=id)
         session.add(newItem)
         session.commit()
-        print 'session: ', newItem.id, newItem.name, newItem.menu_id
         return redirect(url_for('showItems', id=id))
-    print 'login_session: ', login_session
     return render_template('newItem.html', id=id)
 
 

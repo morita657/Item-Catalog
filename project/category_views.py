@@ -32,7 +32,6 @@ def newCategory():
                               user_id=login_session['user_id'])
         session.add(newCategory)
         session.commit()
-        print 'session: ', session
         return redirect(url_for('shoCategory'))
     return render_template('newform.html')
 
