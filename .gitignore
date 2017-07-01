@@ -1,2 +1,3 @@
 # Ignore database
 *.db
+*.pyc
