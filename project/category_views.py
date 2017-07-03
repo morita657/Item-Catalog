@@ -51,7 +51,6 @@ def editCategory(id):
         if request.method == 'POST':
             editCategoryName = Catalog(name=request.form['editname'], id=id)
             editCategory.name = editCategoryName.name
-            session.add(editCategory)
             session.commit()
             return redirect(url_for('shoCategory'))
         return render_template('editCategoryName.html',
