@@ -14,7 +14,7 @@ from flask import session as login_session
 def shoCategory():
     # Show latest created items and categories
     categories = session.query(Catalog).all()
-    items = session.query(CatalogList).order_by("id desc").limit(10).all()
+    items = session.query(CatalogList).order_by("id").limit(10).all()
     if 'username' not in login_session:
         return render_template('publicItemList.html', categories=categories,
                                items=items)
