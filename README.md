@@ -3,7 +3,7 @@
 This project is part of the Full Stack Web Developer nanodegree from udacity. The project utilizes the [Full Stack Foundations](https://classroom.udacity.com/courses/ud088) and [Authentication and Authorization](https://classroom.udacity.com/courses/ud330).
 
 ## Usage
-Download this repository and run on your machine or go here
+Download this repository and run on your machine or go [here](https://gentle-dusk-10501.herokuapp.com/).
 
 
 ## The purpose of this project
