@@ -14,10 +14,15 @@
     </div>
     <div class="col-md-3">
         <h2>Categories</h2>
-        <button type="button" name="button">
-          <a href="{{url_for('downloadCatalog')}}">Download XML</a>
-        </button>
-        <a href="{{url_for('Catalogjson')}}">Download JSON</a>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Downloads
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="{{url_for('downloadCatalog')}}">XML</a>
+                <a class="dropdown-item" href="{{url_for('Catalogjson')}}">JSON</a>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-1"></div>
 
