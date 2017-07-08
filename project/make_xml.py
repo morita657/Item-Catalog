@@ -25,7 +25,7 @@ def downloadCatalog():
     return Response(
     prettyxml,
     mimetype='text/xml',
-    headers={'Content-disposition':'attachment; filename=test.xml'})
+    headers={'Content-disposition':'attachment; filename=catalog.xml'})
 
 
 @app.route('/catalog/<int:id>/XML')
@@ -41,7 +41,7 @@ def downloadCatalogItemxml(id):
     return Response(
     prettyxml,
     mimetype='text/xml',
-    headers={'Content-disposition':'attachment; filename=test.xml'})
+    headers={'Content-disposition':'attachment; filename=catalog-item.xml'})
 
 
 @app.route('/catalog/<int:id>/<int:item_id>/XML')
@@ -55,4 +55,4 @@ def downloadItemxml(id, item_id):
     return Response(
     prettyxml,
     mimetype='text/xml',
-    headers={'Content-disposition':'attachment; filename=test.xml'})
+    headers={'Content-disposition':'attachment; filename=item-detail.xml'})
