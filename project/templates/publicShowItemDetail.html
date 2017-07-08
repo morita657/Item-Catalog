@@ -5,6 +5,7 @@
         <button type="button" name="button">
           <a href="{{url_for('downloadItemxml', id=id, item_id=items.id)}}">Download XML</a>
         </button>
+        <a href="{{url_for('Itemjson', id=id, item_id=items.id)}}">Download JSON</a>
         <p>Category: {{categories.name}}</p>
         <p>Item: {{items.name}}</p>
         <p>Description: {{items.description}}</p>
