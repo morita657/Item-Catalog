@@ -23,6 +23,6 @@ from category_views import shoCategory, newCategory, editCategory, \
     deleteCategory
 from item_views import showItems, newMenuItem, editMenuItem, deleteMenuItem
 from make_json import Catalogjson, CatalogItemjson, Itemjson
-from make_xml import Catalogxml, CatalogItemxml, Itemxml
+from make_xml import downloadCatalog, downloadCatalogItemxml, downloadItemxml
 from auth import showLogin, gconnect, gdisconnect
 from utils import *
