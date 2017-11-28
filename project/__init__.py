@@ -2,7 +2,11 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, render_template, request, redirect, url_for, \
     flash, jsonify, make_response, abort
+import sys
+import logging
 app = Flask(__name__)
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
